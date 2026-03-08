@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Pro · Lista de Repuestos Industriales</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --premium-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .app-header img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .form-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-card h2 i {
+            color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: #fbfdff;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0.5rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer !important;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        .btn-action:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-action.primary {
+            background: var(--text-main);
+            color: white;
+            border: none;
+        }
+
+        .btn-action.primary:hover {
+            background: #000;
+            opacity: 0.9;
+        }
+
+        #output-doc {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            z-index: 1;
+        }
+
+        #output-doc::before {
+            content: "";
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .doc-header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--text-main);
+            padding-bottom: 2rem;
+        }
+
+        .header-main-group {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .doc-logo {
+            width: 60px;
+            height: 60px;
+            background: var(--premium-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .doc-title-area h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            line-height: 1;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+        }
+
+        .doc-subtitle {
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .doc-info {
+            text-align: right;
+        }
+
+        .doc-info p {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .modern-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.75rem;
+            position: relative;
+            z-index: 1;
+            table-layout: fixed;
+        }
+
+        .col-fecha {
+            width: 105px;
+            white-space: nowrap !important;
+        }
+
+        .col-maquina {
+            width: 140px;
+        }
+
+        .col-componente {
+            width: 50%;
+        }
+
+        .col-cant {
+            width: 85px;
+            text-align: center !important;
+            white-space: nowrap !important;
+        }
+
+        .col-prioridad {
+            width: 125px;
+            white-space: nowrap !important;
+        }
+
+        .col-acciones {
+            width: 45px;
+        }
+
+        .modern-table th,
+        .modern-table td {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .col-fecha,
+        .col-prioridad,
+        .col-cant {
+            word-break: normal !important;
+        }
+
+        .modern-table th {
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modern-table tr.item-row td {
+            padding: 1.25rem 1rem;
+            background: #fafafa;
+            vertical-align: top;
+            font-size: 0.9rem;
+        }
+
+        .modern-table tr.item-row td:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .modern-table tr.item-row td:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .row-priority {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-alta {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-media {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-baja {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .row-qty {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .row-desc {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            max-width: 100%;
+        }
+
+        .doc-footer {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            opacity: 1;
+        }
+
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .form-card,
+            .app-header,
+            .preview-toolbar,
+            .btn-delete,
+            .no-print {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr !important;
+            }
+
+            #output-doc {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 15mm 15mm 25mm 15mm;
+                min-height: auto;
+            }
+
+            .doc-header {
+                flex-direction: row !important;
+                gap: 0 !important;
+                align-items: center !important;
+            }
+
+            .header-main-group {
+                width: auto !important;
+            }
+
+            .doc-info {
+                text-align: right !important;
+                width: auto !important;
+            }
+
+            .modern-table {
+                display: table !important;
+                page-break-inside: auto;
+            }
+
+            .modern-table thead {
+                display: table-header-group !important;
+            }
+
+            .modern-table tbody {
+                display: table-row-group !important;
+            }
+
+            .modern-table tr.item-row {
+                display: table-row !important;
+                margin-bottom: 0 !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
+            .modern-table tr.item-row td {
+                display: table-cell !important;
+                padding: 1.25rem 1rem !important;
+                background: #fafafa !important;
+                border: none !important;
+                text-align: left !important;
+            }
+
+            .modern-table tr.item-row td::before {
+                display: none !important;
+            }
+
+            .modern-table tr.item-row td:first-child {
+                border-top-left-radius: 12px !important;
+                border-bottom-left-radius: 12px !important;
+            }
+
+            .modern-table tr.item-row td:last-child {
+                border-top-right-radius: 12px !important;
+                border-bottom-right-radius: 12px !important;
+            }
+
+            .col-cant {
+                text-align: center !important;
+            }
+
+            .item-row {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            .doc-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                margin: 0;
+                padding: 5mm 0;
+                border-top: 1px solid #eee;
+            }
+        }
+
+        @media screen and (max-width: 1000px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .form-card {
+                position: static;
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .preview-toolbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .preview-toolbar h3 {
+                text-align: center;
+            }
+
+            .toolbar-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem 1rem;
+            }
+
+            #output-doc {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .doc-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+
+            .header-main-group {
+                width: 100%;
+            }
+
+            .doc-logo {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .doc-title-area h2 {
+                font-size: 1.8rem;
+                white-space: normal;
+            }
+
+            .doc-subtitle {
+                font-size: 0.7rem;
+            }
+
+            .doc-info {
+                text-align: left;
+                width: 100%;
+            }
+
+            .modern-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .modern-table thead {
+                display: none;
+            }
+
+            .modern-table tbody {
+                display: block;
+            }
+
+            .modern-table tr.item-row {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 1rem;
+                background: #fafafa;
+            }
+
+            .modern-table tr.item-row td {
+                display: block;
+                padding: 0.5rem 0;
+                background: transparent;
+                border: none;
+                text-align: left !important;
+            }
+
+            .modern-table tr.item-row td:first-child,
+            .modern-table tr.item-row td:last-child {
+                border-radius: 0;
+            }
+
+            .modern-table tr.item-row td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                color: var(--text-muted);
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            .col-acciones {
+                text-align: center !important;
+                padding-top: 1rem !important;
+                border-top: 1px solid var(--border);
+                margin-top: 0.5rem;
+            }
+
+            .col-acciones::before {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .form-card {
+                padding: 1rem;
+            }
+
+            .doc-title-area h2 {
+                font-size: 1.5rem;
+            }
+
+            #output-doc {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header removido -->
+        <div class="dashboard">
+            <aside class="form-card">
+                <h2><i class="fas fa-plus-circle"></i> Nuevo Registro</h2>
+                <div class="input-group">
+                    <label>Fecha de Solicitud</label>
+                    <input type="date" id="fechaInp">
+                </div>
+                <div class="input-group">
+                    <label>Máquina / Equipo</label>
+                    <input type="text" id="maquinaInp" placeholder="Ej: Torno CNC, Prensa H-2">
+                </div>
+                <div class="input-group">
+                    <label>Componente Requerido</label>
+                    <input type="text" id="componenteInp" placeholder="Ej: Rodamiento, Sensor">
+                </div>
+                <div class="input-group">
+                    <label>Cantidad</label>
+                    <input type="number" id="cantidadInp" min="1" value="1">
+                </div>
+                <div class="input-group">
+                    <label>Nivel de Prioridad</label>
+                    <select id="prioridadInp">
+                        <option value="Alta">🔴 Crítica / Alta</option>
+                        <option value="Media" selected>🟡 Mantenimiento / Media</option>
+                        <option value="Baja">🟢 Stock / Baja</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Observaciones Técnicas</label>
+                    <textarea id="descripcionInp" rows="3" placeholder="Detalles específicos..."></textarea>
+                </div>
+                <button class="btn-add" onclick="agregarItem()"><i class="fas fa-save"></i> Añadir a la Lista</button>
+            </aside>
+
+            <main class="preview-panel">
+                <div class="preview-toolbar">
+                    <h3 style="font-weight: 500; color: var(--text-muted);">Vista de Documento</h3>
+                    <div class="toolbar-actions">
+                        <button class="btn-action" onclick="limpiarLista()"><i class="fas fa-trash-alt"></i>
+                            Limpiar</button>
+                        <button class="btn-action primary" onclick="imprimirPDF()"><i class="fas fa-file-pdf"></i>
+                            Generar PDF</button>
+                    </div>
+                </div>
+
+                <div id="output-doc">
+                    <div class="doc-header">
+                        <div class="header-main-group">
+                            <img src="logo inverplastic.png" alt="Logo Inverplastic"
+                                style="max-width: 180px; max-height: 100px; height: auto; object-fit: contain; margin-right: 20px;">
+                            <div class="doc-title-area">
+                                <h2>Lista de Repuestos</h2>
+                                <div class="doc-subtitle">Solicitudes Pendientes de Mantenimiento</div>
+                            </div>
+                        </div>
+                        <div class="doc-info">
+                            <p id="doc-date-display">EMISIÓN: --/--/----</p>
+                            <p>ID: #IND-LIST-PRO</p>
+                        </div>
+                    </div>
+
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="col-fecha">Fecha</th>
+                                <th class="col-maquina">Máquina</th>
+                                <th class="col-componente">Componente</th>
+                                <th class="col-cant">Cant.</th>
+                                <th class="col-prioridad">Prioridad</th>
+                                <th class="col-acciones no-print"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-body"></tbody>
+                    </table>
+
+                    <div class="doc-footer">
+                        <div>© Inverplastic79 - Departamento de Mantenimiento</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let items = [];
+        const STORAGE_KEY = 'industrial_master_list_data';
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function () {
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaInp').value = hoy;
+            document.getElementById('doc-date-display').innerText = 'EMISIÓN: ' + formatearFecha(hoy);
+
+            cargarDeStorage();
+            renderList();
+        });
+
+        function formatearFecha(f) {
+            if (!f) return '--/--/----';
+            const [y, m, d] = f.split('-');
+            return d + '/' + m + '/' + y;
+        }
+
+        function guardarEnStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        }
+
+        function cargarDeStorage() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try {
+                    items = JSON.parse(data);
+                } catch (e) {
+                    items = [];
+                }
+            }
+        }
+
+        function renderList() {
+            const tbody = document.getElementById('items-body');
+            tbody.innerHTML = '';
+
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 4rem; color: #94a3b8; font-style: italic;">No hay registros en la lista.</td></tr>';
+                return;
+            }
+
+            items.forEach(function (item, index) {
+                const tr = document.createElement('tr');
+                tr.className = 'item-row';
+                const pClass = 'priority-' + item.prioridad.toLowerCase();
+
+                tr.innerHTML =
+                    '<td class="col-fecha" data-label="Fecha">' + formatearFecha(item.fecha) + '</td>' +
+                    '<td class="col-maquina" style="font-weight:600;" data-label="Máquina">' + item.maquina + '</td>' +
+                    '<td class="col-componente" data-label="Componente">' +
+                    '<div style="font-weight:500;">' + item.componente + '</div>' +
+                    '<div class="row-desc">' + item.descripcion.replace(/\n/g, '<br>') + '</div>' +
+                    '</td>' +
+                    '<td class="col-cant row-qty" data-label="Cantidad">' + item.cantidad + '</td>' +
+                    '<td class="col-prioridad" data-label="Prioridad"><span class="row-priority ' + pClass + '">' + item.prioridad + '</span></td>' +
+                    '<td class="col-acciones no-print">' +
+                    '<button class="btn-delete" onclick="eliminarItem(' + index + ')"><i class="fas fa-times"></i></button>' +
+                    '</td>';
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function agregarItem() {
+            const maquina = document.getElementById('maquinaInp').value;
+            const componente = document.getElementById('componenteInp').value;
+
+            if (!maquina || !componente) {
+                alert('Complete Máquina y Componente.');
+                return;
+            }
+
+            items.push({
+                fecha: document.getElementById('fechaInp').value,
+                maquina: maquina,
+                componente: componente,
+                cantidad: document.getElementById('cantidadInp').value,
+                prioridad: document.getElementById('prioridadInp').value,
+                descripcion: document.getElementById('descripcionInp').value
+            });
+
+            document.getElementById('maquinaInp').value = '';
+            document.getElementById('componenteInp').value = '';
+            document.getElementById('cantidadInp').value = 1;
+            document.getElementById('descripcionInp').value = '';
+
+            guardarEnStorage();
+            renderList();
+        }
+
+        function eliminarItem(index) {
+            if (confirm('¿Desea eliminar este ítem?')) {
+                items.splice(index, 1);
+                guardarEnStorage();
+                renderList();
+            }
+        }
+
+        function limpiarLista() {
+            if (confirm('¿Limpiar toda la lista?')) {
+                items = [];
+                guardarEnStorage();
+                renderList();
+            }
+        }
+
+        function imprimirPDF() {
+            if (items.length === 0) {
+                alert('La lista está vacía.');
+                return;
+            }
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
