@@ -396,29 +396,30 @@
         }
 
         .col-fecha {
-            width: 110px;
+            width: 105px;
             white-space: nowrap !important;
         }
 
         .col-imagen {
-            width: 110px;
-            min-width: 110px;
-            max-width: 110px;
+            width: 135px;
+            min-width: 135px;
+            max-width: 135px;
             padding: 0.6rem 0.5rem;
             text-align: center !important;
             white-space: nowrap !important;
         }
 
         .col-maquina {
-            width: 18%;
+            width: 20%;
         }
 
         .col-componente {
             width: auto;
+            white-space: nowrap !important;
         }
 
         .col-cant {
-            width: 70px;
+            width: 65px;
             text-align: center !important;
             white-space: nowrap !important;
         }
@@ -445,8 +446,10 @@
         .col-fecha,
         .col-prioridad,
         .col-cant,
-        .col-imagen {
+        .col-imagen,
+        .col-componente th {
             word-break: normal !important;
+            white-space: nowrap !important;
         }
 
         .modern-table th {
@@ -528,13 +531,14 @@
             max-width: 100%;
             margin-top: 0.25rem;
             line-height: 1.35;
+            white-space: normal !important;
         }
 
         .table-img {
-            width: 95px;
-            height: 95px;
-            min-width: 95px;
-            min-height: 95px;
+            width: 120px;
+            height: 120px;
+            min-width: 120px;
+            min-height: 120px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
@@ -628,7 +632,17 @@
             .form-card,
             .app-header,
             .preview-toolbar,
-            .no-print {
+            .no-print,
+            .col-acciones,
+            .actions-wrapper,
+            .btn-edit,
+            .btn-delete,
+            .btn-action-icon,
+            .action-icons,
+            .th-actions,
+            .td-actions,
+            th:last-child,
+            td:last-child {
                 display: none !important;
             }
 
@@ -664,6 +678,10 @@
 
             .modern-table {
                 display: table !important;
+                width: 100% !important;
+                table-layout: auto !important;
+                border-collapse: separate !important;
+                border-spacing: 0 0.5rem !important;
                 page-break-inside: auto;
             }
 
@@ -712,11 +730,13 @@
             }
 
             .table-img {
-                max-width: 80px !important;
-                max-height: 80px !important;
-                width: 80px !important;
-                height: 80px !important;
-                object-fit: contain !important;
+                max-width: 120px !important;
+                max-height: 120px !important;
+                width: 120px !important;
+                height: 120px !important;
+                min-width: 120px !important;
+                min-height: 120px !important;
+                object-fit: cover !important;
                 border: 1px solid #cbd5e1 !important;
                 transform: none !important;
                 box-shadow: none !important;
@@ -991,7 +1011,7 @@
                                 <th class="col-fecha">Fecha</th>
                                 <th class="col-imagen">FOTO</th>
                                 <th class="col-maquina">Máquina</th>
-                                <th class="col-componente">Componente</th>
+                                <th class="col-componente" style="white-space: nowrap !important;">Componente</th>
                                 <th class="col-cant">Cant.</th>
                                 <th class="col-prioridad">Prioridad</th>
                                 <th class="col-acciones no-print"></th>
@@ -1125,8 +1145,8 @@
                     const img = new Image();
                     img.onload = function () {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 700;
-                        const MAX_HEIGHT = 700;
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
                         let width = img.width;
                         let height = img.height;
 
