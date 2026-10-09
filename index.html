@@ -547,20 +547,6 @@
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
         }
 
-        .no-img-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 72px;
-            height: 72px;
-            border-radius: 8px;
-            background: #f1f5f9;
-            border: 1px dashed var(--border);
-            color: #cbd5e1;
-            font-size: 1.4rem;
-            margin: 0 auto;
-        }
-
         .actions-wrapper {
             display: flex;
             align-items: center;
@@ -730,10 +716,6 @@
                 border: 1px solid #cbd5e1 !important;
                 transform: none !important;
                 box-shadow: none !important;
-            }
-
-            .no-img-badge {
-                display: none !important;
             }
 
             .item-row {
@@ -1207,9 +1189,9 @@
                 tr.className = 'item-row';
                 const pClass = 'priority-' + (item.prioridad ? item.prioridad.toLowerCase() : 'media');
 
-                const imgTd = item.imagen
+                const imgTd = (item.imagen && item.imagen.trim() !== '')
                     ? '<img src="' + item.imagen + '" alt="Foto" class="table-img" onclick="verImagenModal(\'' + item.imagen.replace(/'/g, "\\'") + '\')" title="Clic para ampliar">'
-                    : '<div class="no-img-badge" title="Sin imagen"><i class="fas fa-image"></i></div>';
+                    : '<span style="color: #94a3b8; font-weight: 500;">—</span>';
 
                 tr.innerHTML =
                     '<td class="col-fecha" data-label="Fecha">' + formatearFecha(item.fecha) + '</td>' +
