@@ -111,28 +111,53 @@
             outline: none;
         }
 
-        .input-group input[type="file"] {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 12px;
-            border: 1.5px dashed var(--border);
-            background: #f8fafc;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .input-group input[type="file"]:hover {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
-
         .input-group input:focus,
         .input-group select:focus,
         .input-group textarea:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
             background: white;
+        }
+
+        .custom-file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.25rem 1rem;
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .custom-file-upload:hover {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .custom-file-upload i {
+            font-size: 1.5rem;
+            color: #2563eb;
+            transition: transform 0.2s ease;
+        }
+
+        .custom-file-upload:hover i {
+            transform: translateY(-2px);
+        }
+
+        .upload-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .upload-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
         .form-buttons {
@@ -186,39 +211,41 @@
         .image-preview-container {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
+            gap: 0.85rem;
+            padding: 0.75rem 1rem;
             background: #f8fafc;
-            border-radius: 10px;
+            border-radius: 0.75rem;
             border: 1px solid var(--border);
         }
 
         .image-preview-container img {
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .btn-remove-img {
             background: #fee2e2;
             color: #991b1b;
-            border: none;
-            padding: 0.35rem 0.65rem;
+            border: 1px solid #fecaca;
+            padding: 0.4rem 0.75rem;
             border-radius: 8px;
             font-size: 0.75rem;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.35rem;
         }
 
         .btn-remove-img:hover {
-            background: #fca5a5;
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
         }
 
         .preview-panel {
@@ -915,12 +942,22 @@
                 </div>
                 <div class="input-group">
                     <label>Foto o Plano del Repuesto</label>
-                    <input type="file" id="imagenInp" accept="image/*" onchange="handleImagenSeleccionada(event)">
+                    <input type="file" id="imagenInp" accept="image/*" style="display: none;" onchange="handleImagenSeleccionada(event)">
+                    
+                    <label for="imagenInp" id="customFileUpload" class="custom-file-upload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span class="upload-title">Subir imagen o plano</span>
+                        <span class="upload-subtitle">PNG, JPG hasta 5MB</span>
+                    </label>
+
                     <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
                         <img id="imagePreview" src="" alt="Vista previa">
-                        <span style="font-size: 0.75rem; color: var(--text-muted); flex: 1;">Imagen cargada</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Imagen adjunta</div>
+                            <div style="font-size: 0.75rem; color: #166534; font-weight: 500;"><i class="fas fa-check-circle"></i> Lista para guardar</div>
+                        </div>
                         <button type="button" class="btn-remove-img" onclick="quitarImagenFormulario()">
-                            <i class="fas fa-trash"></i> Quitar
+                            <i class="fas fa-trash-alt"></i> Quitar
                         </button>
                     </div>
                 </div>
@@ -1010,6 +1047,7 @@
 
             cargarDeStorage();
             renderList();
+            setupDragAndDrop();
         });
 
         function formatearFecha(f) {
@@ -1046,6 +1084,39 @@
                     items = [];
                 }
             }
+        }
+
+        function setupDragAndDrop() {
+            const dropzone = document.getElementById('customFileUpload');
+            if (!dropzone) return;
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.style.borderColor = '#2563eb';
+                    dropzone.style.backgroundColor = '#eff6ff';
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.style.borderColor = '#cbd5e1';
+                    dropzone.style.backgroundColor = '#f8fafc';
+                }, false);
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files && files[0]) {
+                    const input = document.getElementById('imagenInp');
+                    input.files = files;
+                    handleImagenSeleccionada({ target: input });
+                }
+            }, false);
         }
 
         function handleImagenSeleccionada(event) {
@@ -1103,12 +1174,16 @@
         function mostrarPreviewFormulario(src) {
             const preview = document.getElementById('imagePreview');
             const container = document.getElementById('imagePreviewContainer');
+            const uploadBtn = document.getElementById('customFileUpload');
+
             if (src) {
                 preview.src = src;
                 container.style.display = 'flex';
+                if (uploadBtn) uploadBtn.style.display = 'none';
             } else {
                 preview.src = '';
                 container.style.display = 'none';
+                if (uploadBtn) uploadBtn.style.display = 'flex';
             }
         }
 
