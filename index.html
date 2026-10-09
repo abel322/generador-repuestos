@@ -96,7 +96,9 @@
             margin-bottom: 0.5rem;
         }
 
-        .input-group input,
+        .input-group input[type="text"],
+        .input-group input[type="date"],
+        .input-group input[type="number"],
         .input-group select,
         .input-group textarea {
             width: 100%;
@@ -109,6 +111,22 @@
             outline: none;
         }
 
+        .input-group input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1.5px dashed var(--border);
+            background: #f8fafc;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .input-group input[type="file"]:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
         .input-group input:focus,
         .input-group select:focus,
         .input-group textarea:focus {
@@ -117,8 +135,14 @@
             background: white;
         }
 
+        .form-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
         .btn-add {
-            width: 100%;
+            flex: 1;
             padding: 1rem;
             background: var(--primary);
             color: white;
@@ -131,13 +155,70 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 1rem;
         }
 
         .btn-add:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-cancel {
+            padding: 1rem 1.25rem;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .image-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .image-preview-container img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-remove-img {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            padding: 0.35rem 0.65rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-remove-img:hover {
+            background: #fca5a5;
         }
 
         .preview-panel {
@@ -288,31 +369,37 @@
         }
 
         .col-fecha {
-            width: 105px;
+            width: 95px;
             white-space: nowrap !important;
         }
 
+        .col-imagen {
+            width: 75px;
+            text-align: center !important;
+        }
+
         .col-maquina {
-            width: 140px;
+            width: 130px;
         }
 
         .col-componente {
-            width: 50%;
+            width: 38%;
         }
 
         .col-cant {
-            width: 85px;
+            width: 75px;
             text-align: center !important;
             white-space: nowrap !important;
         }
 
         .col-prioridad {
-            width: 125px;
+            width: 115px;
             white-space: nowrap !important;
         }
 
         .col-acciones {
-            width: 45px;
+            width: 75px;
+            text-align: center !important;
         }
 
         .modern-table th,
@@ -325,7 +412,8 @@
 
         .col-fecha,
         .col-prioridad,
-        .col-cant {
+        .col-cant,
+        .col-imagen {
             word-break: normal !important;
         }
 
@@ -341,9 +429,9 @@
         }
 
         .modern-table tr.item-row td {
-            padding: 1.25rem 1rem;
+            padding: 1rem;
             background: #fafafa;
-            vertical-align: top;
+            vertical-align: middle;
             font-size: 0.9rem;
         }
 
@@ -391,6 +479,88 @@
             color: var(--text-muted);
             font-size: 0.8rem;
             max-width: 100%;
+            margin-top: 0.25rem;
+        }
+
+        .table-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: block;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .table-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-img-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            border: 1px dashed var(--border);
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            margin: 0 auto;
+        }
+
+        .actions-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .btn-edit {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #ef4444;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
         }
 
         .doc-footer {
@@ -402,19 +572,6 @@
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-muted);
-        }
-
-        .btn-delete {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            opacity: 0.5;
-            transition: 0.2s;
-        }
-
-        .btn-delete:hover {
-            opacity: 1;
         }
 
         @media print {
@@ -430,7 +587,6 @@
             .form-card,
             .app-header,
             .preview-toolbar,
-            .btn-delete,
             .no-print {
                 display: none !important;
             }
@@ -489,10 +645,11 @@
 
             .modern-table tr.item-row td {
                 display: table-cell !important;
-                padding: 1.25rem 1rem !important;
+                padding: 1rem 0.75rem !important;
                 background: #fafafa !important;
                 border: none !important;
                 text-align: left !important;
+                vertical-align: middle !important;
             }
 
             .modern-table tr.item-row td::before {
@@ -509,8 +666,21 @@
                 border-bottom-right-radius: 12px !important;
             }
 
-            .col-cant {
+            .col-cant, .col-imagen {
                 text-align: center !important;
+            }
+
+            .table-img {
+                max-width: 48px !important;
+                max-height: 48px !important;
+                object-fit: contain !important;
+                border: 1px solid #cbd5e1 !important;
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .no-img-badge {
+                display: none !important;
             }
 
             .item-row {
@@ -658,6 +828,10 @@
             .col-acciones::before {
                 display: none;
             }
+
+            .table-img {
+                margin: 0;
+            }
         }
 
         @media screen and (max-width: 480px) {
@@ -682,10 +856,9 @@
 
 <body>
     <div class="container">
-        <!-- Header removido -->
         <div class="dashboard">
             <aside class="form-card">
-                <h2><i class="fas fa-plus-circle"></i> Nuevo Registro</h2>
+                <h2 id="formTitle"><i class="fas fa-plus-circle"></i> Nuevo Registro</h2>
                 <div class="input-group">
                     <label>Fecha de Solicitud</label>
                     <input type="date" id="fechaInp">
@@ -714,7 +887,26 @@
                     <label>Observaciones Técnicas</label>
                     <textarea id="descripcionInp" rows="3" placeholder="Detalles específicos..."></textarea>
                 </div>
-                <button class="btn-add" onclick="agregarItem()"><i class="fas fa-save"></i> Añadir a la Lista</button>
+                <div class="input-group">
+                    <label>Foto o Plano del Repuesto</label>
+                    <input type="file" id="imagenInp" accept="image/*" onchange="handleImagenSeleccionada(event)">
+                    <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+                        <img id="imagePreview" src="" alt="Vista previa">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); flex: 1;">Imagen cargada</span>
+                        <button type="button" class="btn-remove-img" onclick="quitarImagenFormulario()">
+                            <i class="fas fa-trash"></i> Quitar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <button class="btn-add" id="btnGuardar" onclick="agregarOActualizarItem()">
+                        <i class="fas fa-save"></i> <span id="btnGuardarTexto">Añadir a la Lista</span>
+                    </button>
+                    <button class="btn-cancel" id="btnCancelar" onclick="cancelarEdicion()" style="display: none;">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
             </aside>
 
             <main class="preview-panel">
@@ -748,6 +940,7 @@
                         <thead>
                             <tr>
                                 <th class="col-fecha">Fecha</th>
+                                <th class="col-imagen">Foto / Plano</th>
                                 <th class="col-maquina">Máquina</th>
                                 <th class="col-componente">Componente</th>
                                 <th class="col-cant">Cant.</th>
@@ -766,9 +959,21 @@
         </div>
     </div>
 
+    <!-- Modal para ampliar imagen -->
+    <div id="imageModal" class="no-print" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;" onclick="cerrarImagenModal()">
+        <div style="position: relative; max-width: 90vw; max-height: 90vh;" onclick="event.stopPropagation()">
+            <img id="modalImg" src="" alt="Vista Ampliada" style="max-width: 90vw; max-height: 85vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); object-fit: contain; background: white; border: 1px solid var(--border);">
+            <button onclick="cerrarImagenModal()" style="position: absolute; top: -12px; right: -12px; background: #ef4444; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         // Variables globales
         let items = [];
+        let editIndex = null;
+        let imagenBase64Actual = '';
         const STORAGE_KEY = 'industrial_master_list_data';
 
         // Inicialización
@@ -787,8 +992,23 @@
             return d + '/' + m + '/' + y;
         }
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function guardarEnStorage() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            } catch (e) {
+                console.error('Error al guardar en localStorage', e);
+                alert('No se pudo guardar en almacenamiento local. Es posible que el almacenamiento esté lleno.');
+            }
         }
 
         function cargarDeStorage() {
@@ -802,66 +1022,196 @@
             }
         }
 
+        function handleImagenSeleccionada(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            procesarImagen(file).then(base64 => {
+                imagenBase64Actual = base64;
+                mostrarPreviewFormulario(base64);
+            }).catch(err => {
+                console.error(err);
+                alert('Error al procesar la imagen seleccionada.');
+            });
+        }
+
+        function procesarImagen(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 600;
+                        const MAX_HEIGHT = 600;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height = Math.round(height * (MAX_WIDTH / width));
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width = Math.round(width * (MAX_HEIGHT / height));
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(dataUrl);
+                    };
+                    img.onerror = () => reject('Error al procesar la imagen');
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject('Error al leer el archivo');
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function mostrarPreviewFormulario(src) {
+            const preview = document.getElementById('imagePreview');
+            const container = document.getElementById('imagePreviewContainer');
+            if (src) {
+                preview.src = src;
+                container.style.display = 'flex';
+            } else {
+                preview.src = '';
+                container.style.display = 'none';
+            }
+        }
+
+        function quitarImagenFormulario() {
+            imagenBase64Actual = '';
+            document.getElementById('imagenInp').value = '';
+            mostrarPreviewFormulario('');
+        }
+
         function renderList() {
             const tbody = document.getElementById('items-body');
             tbody.innerHTML = '';
 
             if (items.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 4rem; color: #94a3b8; font-style: italic;">No hay registros en la lista.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 4rem; color: #94a3b8; font-style: italic;">No hay registros en la lista.</td></tr>';
                 return;
             }
 
             items.forEach(function (item, index) {
                 const tr = document.createElement('tr');
                 tr.className = 'item-row';
-                const pClass = 'priority-' + item.prioridad.toLowerCase();
+                const pClass = 'priority-' + (item.prioridad ? item.prioridad.toLowerCase() : 'media');
+
+                const imgTd = item.imagen
+                    ? '<img src="' + item.imagen + '" alt="Foto/Plano" class="table-img" onclick="verImagenModal(\'' + item.imagen.replace(/'/g, "\\'") + '\')" title="Clic para ampliar">'
+                    : '<div class="no-img-badge" title="Sin imagen"><i class="fas fa-image"></i></div>';
 
                 tr.innerHTML =
                     '<td class="col-fecha" data-label="Fecha">' + formatearFecha(item.fecha) + '</td>' +
-                    '<td class="col-maquina" style="font-weight:600;" data-label="Máquina">' + item.maquina + '</td>' +
+                    '<td class="col-imagen" data-label="Foto / Plano">' + imgTd + '</td>' +
+                    '<td class="col-maquina" style="font-weight:600;" data-label="Máquina">' + escapeHtml(item.maquina) + '</td>' +
                     '<td class="col-componente" data-label="Componente">' +
-                    '<div style="font-weight:500;">' + item.componente + '</div>' +
-                    '<div class="row-desc">' + item.descripcion.replace(/\n/g, '<br>') + '</div>' +
+                    '<div style="font-weight:500;">' + escapeHtml(item.componente) + '</div>' +
+                    '<div class="row-desc">' + escapeHtml(item.descripcion).replace(/\n/g, '<br>') + '</div>' +
                     '</td>' +
                     '<td class="col-cant row-qty" data-label="Cantidad">' + item.cantidad + '</td>' +
-                    '<td class="col-prioridad" data-label="Prioridad"><span class="row-priority ' + pClass + '">' + item.prioridad + '</span></td>' +
-                    '<td class="col-acciones no-print">' +
-                    '<button class="btn-delete" onclick="eliminarItem(' + index + ')"><i class="fas fa-times"></i></button>' +
+                    '<td class="col-prioridad" data-label="Prioridad"><span class="row-priority ' + pClass + '">' + escapeHtml(item.prioridad) + '</span></td>' +
+                    '<td class="col-acciones no-print" data-label="Acciones">' +
+                    '<div class="actions-wrapper">' +
+                    '<button class="btn-edit" onclick="editarItem(' + index + ')" title="Editar registro"><i class="fas fa-edit"></i></button>' +
+                    '<button class="btn-delete" onclick="eliminarItem(' + index + ')" title="Eliminar registro"><i class="fas fa-trash-alt"></i></button>' +
+                    '</div>' +
                     '</td>';
 
                 tbody.appendChild(tr);
             });
         }
 
-        function agregarItem() {
-            const maquina = document.getElementById('maquinaInp').value;
-            const componente = document.getElementById('componenteInp').value;
+        function agregarOActualizarItem() {
+            const maquina = document.getElementById('maquinaInp').value.trim();
+            const componente = document.getElementById('componenteInp').value.trim();
 
             if (!maquina || !componente) {
-                alert('Complete Máquina y Componente.');
+                alert('Complete los campos obligatorios: Máquina y Componente.');
                 return;
             }
 
-            items.push({
+            const itemData = {
                 fecha: document.getElementById('fechaInp').value,
                 maquina: maquina,
                 componente: componente,
                 cantidad: document.getElementById('cantidadInp').value,
                 prioridad: document.getElementById('prioridadInp').value,
-                descripcion: document.getElementById('descripcionInp').value
-            });
+                descripcion: document.getElementById('descripcionInp').value.trim(),
+                imagen: imagenBase64Actual
+            };
 
-            document.getElementById('maquinaInp').value = '';
-            document.getElementById('componenteInp').value = '';
-            document.getElementById('cantidadInp').value = 1;
-            document.getElementById('descripcionInp').value = '';
+            if (editIndex !== null) {
+                items[editIndex] = itemData;
+            } else {
+                items.push(itemData);
+            }
 
+            resetearFormulario();
             guardarEnStorage();
             renderList();
         }
 
+        function editarItem(index) {
+            const item = items[index];
+            if (!item) return;
+
+            editIndex = index;
+            document.getElementById('fechaInp').value = item.fecha || new Date().toISOString().split('T')[0];
+            document.getElementById('maquinaInp').value = item.maquina || '';
+            document.getElementById('componenteInp').value = item.componente || '';
+            document.getElementById('cantidadInp').value = item.cantidad || 1;
+            document.getElementById('prioridadInp').value = item.prioridad || 'Media';
+            document.getElementById('descripcionInp').value = item.descripcion || '';
+
+            imagenBase64Actual = item.imagen || '';
+            mostrarPreviewFormulario(imagenBase64Actual);
+
+            document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Editar Registro';
+            document.getElementById('btnGuardarTexto').innerText = 'Guardar Cambios';
+            document.getElementById('btnCancelar').style.display = 'inline-flex';
+
+            document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function cancelarEdicion() {
+            resetearFormulario();
+        }
+
+        function resetearFormulario() {
+            editIndex = null;
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaInp').value = hoy;
+            document.getElementById('maquinaInp').value = '';
+            document.getElementById('componenteInp').value = '';
+            document.getElementById('cantidadInp').value = 1;
+            document.getElementById('prioridadInp').value = 'Media';
+            document.getElementById('descripcionInp').value = '';
+            document.getElementById('imagenInp').value = '';
+            imagenBase64Actual = '';
+            mostrarPreviewFormulario('');
+
+            document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Nuevo Registro';
+            document.getElementById('btnGuardarTexto').innerText = 'Añadir a la Lista';
+            document.getElementById('btnCancelar').style.display = 'none';
+        }
+
         function eliminarItem(index) {
             if (confirm('¿Desea eliminar este ítem?')) {
+                if (editIndex === index) {
+                    resetearFormulario();
+                } else if (editIndex !== null && editIndex > index) {
+                    editIndex--;
+                }
                 items.splice(index, 1);
                 guardarEnStorage();
                 renderList();
@@ -871,6 +1221,7 @@
         function limpiarLista() {
             if (confirm('¿Limpiar toda la lista?')) {
                 items = [];
+                resetearFormulario();
                 guardarEnStorage();
                 renderList();
             }
@@ -882,6 +1233,16 @@
                 return;
             }
             window.print();
+        }
+
+        function verImagenModal(src) {
+            if (!src) return;
+            document.getElementById('modalImg').src = src;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function cerrarImagenModal() {
+            document.getElementById('imageModal').style.display = 'none';
         }
     </script>
 </body>
